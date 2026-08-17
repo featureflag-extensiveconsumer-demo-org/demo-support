@@ -10,7 +10,7 @@ from ldclient.config import Config
 from ldclient.context import Context
 
 REPOSITORY = "demo-support"
-RELEASE = "v001"
+RELEASE = "v002"
 FLAGS = ["demo-support-assistant"]
 
 CLUSTERS = json.loads(r'''{"production":[{"key":"prod-eu-west-02","name":"Production EU West 02","environment":"production","region":"eu-west","ordinal":2,"releaseRing":"canary","weight":5},{"key":"prod-sa-east-02","name":"Production South America East 02","environment":"production","region":"sa-east","ordinal":2,"releaseRing":"stable","weight":10},{"key":"prod-us-east-02","name":"Production US East 02","environment":"production","region":"us-east","ordinal":2,"releaseRing":"stable","weight":15},{"key":"prod-emea-central-04","name":"Production EMEA Central 04","environment":"production","region":"emea-central","ordinal":4,"releaseRing":"stable","weight":30},{"key":"prod-eu-west-01","name":"Production EU West 01","environment":"production","region":"eu-west","ordinal":1,"releaseRing":"stable","weight":40}],"staging":[{"key":"stg-eu-central-02","name":"Staging EU Central 02","environment":"staging","region":"eu-central","ordinal":2,"releaseRing":"canary","weight":40},{"key":"stg-eu-central-01","name":"Staging EU Central 01","environment":"staging","region":"eu-central","ordinal":1,"releaseRing":"stable","weight":60}],"test":[{"key":"test-eu-central-02","name":"Test EU Central 02","environment":"test","region":"eu-central","ordinal":2,"releaseRing":"canary","weight":25},{"key":"test-eu-central-01","name":"Test EU Central 01","environment":"test","region":"eu-central","ordinal":1,"releaseRing":"stable","weight":75}],"dev":[{"key":"dev-local-01","name":"Development Local 01","environment":"dev","region":"local","ordinal":1,"releaseRing":"stable","weight":100}]}''')
@@ -87,7 +87,7 @@ def main():
     index = 0
     while not stop_requested:
         opened_at = time.time()
-        ldclient.set_config(Config(sdk_key))
+        ldclient.set_config(Config(sdk_key, application={"id": REPOSITORY, "version": RELEASE}))
         client = ldclient.get()
         count = batch_size(environment, datetime.now(timezone.utc))
         per_flag = {flag: {"true": 0, "false": 0} for flag in FLAGS}
